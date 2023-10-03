@@ -24,6 +24,7 @@ renderer.render();
 console.log(game);
 console.log(map);
 console.log(renderer);
+
 //Game loop and rendr loop
 const loop = () => {
     renderer.render();

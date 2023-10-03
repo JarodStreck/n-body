@@ -22,7 +22,9 @@ export class Game extends Map {
      * @param {Function} f The function to be executed. It takes a shape as unique parameters, and its return value is ignored.
      */
     forEachShape(f) {
-        // TODO
+        for(let [id,playerinfo] of this){
+            f(playerinfo.shape);
+        }
     }
 
     /**
