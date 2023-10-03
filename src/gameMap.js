@@ -14,6 +14,11 @@ export class GameMap {
      * @param {Shape} shape The shape to be dropped.
      */
     dropShape(shape) {
+        for(let row = shape.row; row < this.height; row++){
+            // if(this.testShape(shape,row+1)){
+
+            // }
+        }
       this.groundShape(shape); 
     }
 
