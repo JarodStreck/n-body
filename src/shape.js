@@ -5,7 +5,7 @@ export class Shape {
      * @returns {Number} A random shape type
      */
     static getRandomShapeType() {
-        // TODO
+       return Math.round(Math.random() * (shapeTypes.length - 1));
     }
 
     constructor(type, playerId, col, row, rotation) {
@@ -23,6 +23,6 @@ export class Shape {
      * @returns {Array} The coordinates of this shape, given its rotation.
      */
     getCoordinates(rotation = this.rotation) {
-        // TODO
+        return shapeTypes[this.shapeType][rotation];
     }
 }

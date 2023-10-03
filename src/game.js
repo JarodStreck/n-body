@@ -14,7 +14,7 @@ export class Game extends Map {
      * @param {Number} id Id of the player whose shape is to be returned.
      */
     getShape(id) {
-        // TODO
+        return this.get(id).shape
     }
 
     /**
@@ -30,6 +30,9 @@ export class Game extends Map {
      * @param {Number} playerId The id of the player whose shape should be dropped
      */
     dropShape(playerId) {
+        this.map.dropShape(this.getShape(playerId));
+        this.map.clearFullRows();
+        this.addNewShape(playerId);
         /*
         TODO:
         - Drop the shape on the game map and clear any full rows
@@ -41,6 +44,26 @@ export class Game extends Map {
      * Advances the game by one step, i.e. moves all shapes down by one, drops any shape that was touching the ground, and replace it with a new one.
      */
     step() {
+        if(this.isGameOver){
+            return;
+        }
+        for(let [key,value] of this){
+            let hit_ground = false;
+            const shape = value.shape;
+            console.log(shape);
+            const coords = shape.getCoordinates(shape.rotation);
+            for(let i = 0 ; i < coords.length; i++){
+                if(shape.row + coords[i][1] >= (gameRows -1)){
+                    hit_ground = true;
+                }  
+            }
+            if(hit_ground){
+                this.dropShape(key);
+            }else{
+                shape.row += 1;
+            }
+
+        }
         /*
         TODO:
         - If the game is over, ignore this phase.
@@ -54,7 +77,10 @@ export class Game extends Map {
      */
     addNewShape(id) {
         let shapeCol = this.map.width / 2;
-
+        let shapeRow = 0;
+        this.map.map[shapeCol][shapeRow] = id;
+        const shape = new Shape(Shape.getRandomShapeType(),"Jarod",shapeCol,shapeRow,0);
+        this.get("Jarod").shape = shape;
         /*
         TODO
         - Add a shape of random type to the given player.

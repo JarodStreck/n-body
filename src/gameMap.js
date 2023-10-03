@@ -4,7 +4,9 @@ export class GameMap {
         this.height = height;
         /** 2D array storing for each position the id of the player whose block is there, or -1 otherwise. */
         this.map = [];
-        // TODO: initialize the map to all -1.
+        for(let i = 0 ; i < height;i++){
+            this.map[i] = Array(width).fill(-1);
+        }
     }
 
     /**
@@ -12,7 +14,7 @@ export class GameMap {
      * @param {Shape} shape The shape to be dropped.
      */
     dropShape(shape) {
-        // TODO
+      this.groundShape(shape); 
     }
 
     /**
@@ -20,7 +22,13 @@ export class GameMap {
      * @param {Shape} shape The shape to be grounded.
      */
     groundShape(shape) {
-        // TODO
+        const coords = shape.getCoordinates(shape.rotation);
+        for(let coord of coords){
+            let x = shape.row + coord[1];
+            let y = shape.col + coord[0];
+            this.map[x][y] = shape.playerId;
+        }
+        console.log(this.map);
     }
 
     /**

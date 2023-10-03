@@ -10,5 +10,28 @@ TODO:
 - Start a game loop that makes the game step every stepIntervalMs milliseconds (see constants.js).
 - Start a rendering loop on the renderer using requestAnimationFrame.
 */
+const canvas = document.getElementById("canvas");
+
+const map = new GameMap(gameCols, gameRows);
+const game = new Game(map);
+const player = new PlayerInfo("Jarod", undefined);
+const renderer = new Renderer(game, canvas.getContext("2d"));
+
+game.set("Jarod", player);
+game.addNewShape("Jarod");
+
+renderer.render();
+console.log(game);
+console.log(map);
+console.log(renderer);
+//Game loop and rendr loop
+const loop = () => {
+    renderer.render();
+    window.requestAnimationFrame(loop);
+}
+window.requestAnimationFrame(loop)
+setInterval(() => {
+    game.step();
+}, stepIntervalMs)
 
 console.log("Hello, world!");
