@@ -50,10 +50,10 @@ export class Game extends Map {
         for(let [key,value] of this){
             let hit_ground = false;
             const shape = value.shape;
-            console.log(shape);
             const coords = shape.getCoordinates(shape.rotation);
-            for(let i = 0 ; i < coords.length; i++){
-                if(shape.row + coords[i][1] >= (gameRows -1)){
+            for(const coord of coords){
+                console.log(this.map.getPlayerAt(shape.row + coord[1],shape.col + coord[0]));
+                if(shape.row + coord[1] >= (gameRows -1) || this.map.getPlayerAt(shape.row + coord[1] + 1,shape.col + coord[0]) != -1){
                     hit_ground = true;
                 }  
             }
@@ -78,9 +78,13 @@ export class Game extends Map {
     addNewShape(id) {
         let shapeCol = this.map.width / 2;
         let shapeRow = 0;
-        this.map.map[shapeCol][shapeRow] = id;
-        const shape = new Shape(Shape.getRandomShapeType(),"Jarod",shapeCol,shapeRow,0);
-        this.get("Jarod").shape = shape;
+        const shape = new Shape(Shape.getRandomShapeType(),id,shapeCol,shapeRow,0);
+        
+        if(!this.map.testShape(shape)){
+            this.gameOver();
+        }else{
+            this.get(id).shape = shape;
+        }
         /*
         TODO
         - Add a shape of random type to the given player.
@@ -92,6 +96,7 @@ export class Game extends Map {
      * Resets the game upon game over.
      */
     gameOver() {
+        this.isGameOver = true;
         // TODO: reset the map and all players.
     }
 }

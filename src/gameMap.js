@@ -24,9 +24,9 @@ export class GameMap {
     groundShape(shape) {
         const coords = shape.getCoordinates(shape.rotation);
         for(let coord of coords){
-            let x = shape.row + coord[1];
-            let y = shape.col + coord[0];
-            this.map[x][y] = shape.playerId;
+            let x = shape.col + coord[0];
+            let y = shape.row + coord[1];
+            this.map[y][x] = shape.playerId;
         }
         console.log(this.map);
     }
@@ -44,7 +44,20 @@ export class GameMap {
      * @returns true if and only if the shape does not overlap anything and is not out of bounds.
      */
     testShape(shape, row = shape.row, col = shape.col, rotation = shape.rotation) {
-        // TODO
+        const coords = shape.getCoordinates(rotation);
+        
+        for(const coord of coords){
+            if(col + coord[0] < 0 || col + coord[0] > (this.width -1)){
+                return false;
+            }
+            if(this.getPlayerAt(row + coord[1],col + coord[0]) != -1){
+                return false;
+            }
+            if(row + coord[1] > (this.height -1)){
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

@@ -17,25 +17,38 @@ export class Renderer {
      * Clears the context and draws all falling and dropped shapes.
      */
     render() {
-       
+        const size = cellToPixel(1);
         this.context.clearRect(0,0,cellToPixel(this.game.map.width),cellToPixel(this.game.map.height));
-        const map = this.game.map.map;
         for(let [key,value] of this.game){
             const coords = value.shape.getCoordinates(value.shape.rotation);
            
 
             const x_start = cellToPixel(value.shape.col);
             const y_start = cellToPixel(value.shape.row);
-            const size = cellToPixel(1);
 
 
-            for(let i = 0 ; i < coords.length; i++){
-                this.context.fillStyle = shapeColors[value.shape.shapeType];
-                this.context.fillRect(x_start + coords[i][0] * size ,y_start + coords[i][1]*size,size,size)
+            for(const coord of coords){
+                this.context.fillStyle = shapeColors[key];
+                this.context.fillRect(x_start + coord[0] * size ,y_start + coord[1]*size,size,size)
             }
         
             //this.context.fillRect(x_pixel,y_pixel,cellToPixel(1),cellToPixel(1))
         }
+        
+        const game_map = this.game.map;
+        for(let row = 0 ; row < game_map.height; row++){
+            for(let col = 0 ; col < game_map.width; col++){
+                if(game_map.getPlayerAt(row,col) != -1){
+                    const x_start = cellToPixel(col);
+                    const y_start = cellToPixel(row);
+                   
+
+                    this.context.fillStyle = shapeColors[game_map.getPlayerAt(row,col)];
+                    this.context.fillRect(x_start,y_start, size,size)
+                }
+            }
+        }
+
         /*
         TODO:
         - Reset context

@@ -14,11 +14,11 @@ const canvas = document.getElementById("canvas");
 
 const map = new GameMap(gameCols, gameRows);
 const game = new Game(map);
-const player = new PlayerInfo("Jarod", undefined);
+const player = new PlayerInfo(0, undefined);
 const renderer = new Renderer(game, canvas.getContext("2d"));
 
-game.set("Jarod", player);
-game.addNewShape("Jarod");
+game.set(0, player);
+game.addNewShape(0);
 
 renderer.render();
 console.log(game);
