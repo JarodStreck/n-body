@@ -23,6 +23,13 @@ export class Shape {
      * @returns {Array} The coordinates of this shape, given its rotation.
      */
     getCoordinates(rotation = this.rotation) {
-        return shapeTypes[this.shapeType][rotation];
+        let modulo = 0 ;
+
+        if(this.shapeType == 1){
+            modulo = 2;
+        }else{
+            modulo = 4;
+        }
+        return shapeTypes[this.shapeType][rotation % modulo];
     }
 }
