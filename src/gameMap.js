@@ -15,11 +15,11 @@ export class GameMap {
      */
     dropShape(shape) {
         for(let row = shape.row; row < this.height; row++){
-            // if(this.testShape(shape,row+1)){
-
-            // }
+            if(this.testShape(shape)){
+                shape.row= row;
+            }
         }
-      this.groundShape(shape); 
+        this.groundShape(shape); 
     }
 
     /**
@@ -55,10 +55,10 @@ export class GameMap {
             if(col + coord[0] < 0 || col + coord[0] > (this.width -1)){
                 return false;
             }
-            if(this.getPlayerAt(row + coord[1],col + coord[0]) != -1){
+            if(row + coord[1] >= (this.height -1)){
                 return false;
             }
-            if(row + coord[1] > (this.height -1)){
+            if(this.getPlayerAt(row + coord[1] + 1,col + coord[0]) != -1){
                 return false;
             }
         }
@@ -69,7 +69,16 @@ export class GameMap {
      * Clears any row that is fully complete.
      */
     clearFullRows() {
-        // TODO
+        for(let row = 0 ; row < this.map.length; row++){
+            const row_is_full = this.map[row].every((el)=>{
+                if(el != -1){
+                    return true;
+                }
+            })
+            if(row_is_full){
+                this.clearRow(row);
+            }
+        }
     }
 
     /**
@@ -77,7 +86,10 @@ export class GameMap {
      * @param {Number} row The row to be cleared.
      */
     clearRow(row) {
-        // TODO
+        const new_row = Array(this.width).fill(-1);
+
+        this.map.splice(row,1);
+        this.map.unshift(new_row);
     }
 
     /**

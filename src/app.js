@@ -19,11 +19,10 @@ const renderer = new Renderer(game, canvas.getContext("2d"));
 
 game.set(0, player);
 game.addNewShape(0);
-
-renderer.render();
 console.log(game);
 console.log(map);
 console.log(renderer);
+renderer.render();
 
 //Game loop and rendr loop
 const loop = () => {

@@ -53,17 +53,23 @@ export class Game extends Map {
             let hit_ground = false;
             const shape = value.shape;
             const coords = shape.getCoordinates(shape.rotation);
-            for(const coord of coords){
-                console.log(this.map.getPlayerAt(shape.row + coord[1],shape.col + coord[0]));
-                if(shape.row + coord[1] >= (gameRows -1) || this.map.getPlayerAt(shape.row + coord[1] + 1,shape.col + coord[0]) != -1){
-                    hit_ground = true;
-                }  
-            }
-            if(hit_ground){
-                this.dropShape(key);
+            if(this.map.testShape(shape)){
+                shape.row+= 1;
             }else{
-                shape.row += 1;
+                this.dropShape(key);
+
             }
+            // for(const coord of coords){
+            //     console.log(this.map.getPlayerAt(shape.row + coord[1],shape.col + coord[0]));
+            //     if(shape.row + coord[1] >= (gameRows -1) || this.map.getPlayerAt(shape.row + coord[1] + 1,shape.col + coord[0]) != -1){
+            //         hit_ground = true;
+            //     }  
+            // }
+            // if(hit_ground){
+            //     this.dropShape(key);
+            // }else{
+            //     shape.row += 1;
+            // }
 
         }
         /*
@@ -99,6 +105,7 @@ export class Game extends Map {
      */
     gameOver() {
         this.isGameOver = true;
+        console.log("GAME OVER");
         // TODO: reset the map and all players.
     }
 }
