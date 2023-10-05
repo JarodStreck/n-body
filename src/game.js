@@ -35,6 +35,12 @@ export class Game extends Map {
         this.map.dropShape(this.getShape(playerId));
         this.map.clearFullRows();
         this.addNewShape(playerId);
+        //If one shape is overlapping another shape when grounding, reduce it into atoms and delete it
+        this.forEachShape((shape)=>{
+            if(!this.map.testShape(shape)){
+                this.addNewShape(shape.playerId);
+            }
+        })
         /*
         TODO:
         - Drop the shape on the game map and clear any full rows
@@ -49,29 +55,17 @@ export class Game extends Map {
         if(this.isGameOver){
             return;
         }
-        for(let [key,value] of this){
-            let hit_ground = false;
-            const shape = value.shape;
-            const coords = shape.getCoordinates(shape.rotation);
-            if(this.map.testShape(shape)){
+        console.log("inforeach")
+        this.forEachShape((shape)=>{
+            console.log(shape.playerId);
+            if(this.map.testShape(shape,shape.row+1)){
+                console.log("THIS SHAPE IS NOT HITTING SOMETHING: "  + shape.playerId)
                 shape.row+= 1;
             }else{
-                this.dropShape(key);
-
+                console.log("THIS SHAPE IS HITTING SOMETHING : "  + shape.playerId)
+                this.dropShape(shape.playerId);
             }
-            // for(const coord of coords){
-            //     console.log(this.map.getPlayerAt(shape.row + coord[1],shape.col + coord[0]));
-            //     if(shape.row + coord[1] >= (gameRows -1) || this.map.getPlayerAt(shape.row + coord[1] + 1,shape.col + coord[0]) != -1){
-            //         hit_ground = true;
-            //     }  
-            // }
-            // if(hit_ground){
-            //     this.dropShape(key);
-            // }else{
-            //     shape.row += 1;
-            // }
-
-        }
+        })
         /*
         TODO:
         - If the game is over, ignore this phase.
@@ -106,6 +100,10 @@ export class Game extends Map {
     gameOver() {
         this.isGameOver = true;
         console.log("GAME OVER");
+        this.clear();
+        for(let i = 0 ; i < gameRows;i++){
+            this.map.map[i] = Array(gameCols).fill(-1);
+        }
         // TODO: reset the map and all players.
     }
 }

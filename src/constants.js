@@ -3,7 +3,7 @@ export const port = 3000;
 export const gameRows = 20;
 export const gameCols = 10;
 
-export const stepIntervalMs = 500;
+export const stepIntervalMs = 1000;
 
 export const gamePixelWidth = 300;
 export const gamePixelHeight = 600;

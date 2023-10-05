@@ -14,8 +14,10 @@ export class GameMap {
      * @param {Shape} shape The shape to be dropped.
      */
     dropShape(shape) {
+        console.log("DROPPED SHAPE");
+        console.log(shape);
         for(let row = shape.row; row < this.height; row++){
-            if(this.testShape(shape)){
+            if(this.testShape(shape,shape.row+1)){
                 shape.row= row;
             }
         }
@@ -55,10 +57,10 @@ export class GameMap {
             if(col + coord[0] < 0 || col + coord[0] > (this.width -1)){
                 return false;
             }
-            if(row + coord[1] >= (this.height -1)){
+            if(row + coord[1] >= (this.height)){
                 return false;
             }
-            if(this.getPlayerAt(row + coord[1] + 1,col + coord[0]) != -1){
+            if(this.getPlayerAt(row + coord[1],col + coord[0]) != -1){
                 return false;
             }
         }

@@ -18,23 +18,20 @@ export class Renderer {
      */
     render() {
         const size = cellToPixel(1);
+        //Reset context
         this.context.clearRect(0,0,cellToPixel(this.game.map.width),cellToPixel(this.game.map.height));
-        for(let [key,value] of this.game){
-            const coords = value.shape.getCoordinates(value.shape.rotation);
-           
-
-            const x_start = cellToPixel(value.shape.col);
-            const y_start = cellToPixel(value.shape.row);
-
-
+        //Draw falling shapes
+        this.game.forEachShape((shape)=>{
+            const coords = shape.getCoordinates(shape.rotation);
+            const x_start = cellToPixel(shape.col);
+            const y_start = cellToPixel(shape.row);
+            
             for(const coord of coords){
-                this.context.fillStyle = shapeColors[key];
+                this.context.fillStyle = shapeColors[shape.playerId];
                 this.context.fillRect(x_start + coord[0] * size ,y_start + coord[1]*size,size,size)
             }
-        
-            //this.context.fillRect(x_pixel,y_pixel,cellToPixel(1),cellToPixel(1))
-        }
-        
+        })
+        //Draw shape on the map
         const game_map = this.game.map;
         for(let row = 0 ; row < game_map.height; row++){
             for(let col = 0 ; col < game_map.width; col++){
@@ -42,7 +39,6 @@ export class Renderer {
                     const x_start = cellToPixel(col);
                     const y_start = cellToPixel(row);
                    
-
                     this.context.fillStyle = shapeColors[game_map.getPlayerAt(row,col)];
                     this.context.fillRect(x_start,y_start, size,size)
                 }
