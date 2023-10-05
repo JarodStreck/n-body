@@ -1,9 +1,6 @@
 import { Renderer } from "./renderer.js";
-import { Game } from "./game.js";
-import { PlayerInfo } from "./playerInfo.js";
-import { GameMap } from "./gameMap.js";
-import { gameCols, gameRows, stepIntervalMs } from "./constants.js";
-import { Shape } from "./shape.js";
+import { FPS_WANTED} from "./constants.js";
+import { Particle } from "./particle.js";
 
 /*
 TODO:
@@ -12,35 +9,12 @@ TODO:
 - Start a rendering loop on the renderer using requestAnimationFrame.
 */
 const canvas = document.getElementById("canvas");
-
-const map = new GameMap(gameCols, gameRows);
-const game = new Game(map);
-//const player = new PlayerInfo(0, undefined);
-const renderer = new Renderer(game, canvas.getContext("2d"));
-
-// const testMap = new GameMap(5, 5);
-// testMap.map = [
-//     [-1, -1, -1, -1, -1],
-//     [-1, -1, -1, -1, -1],
-//     [-1, 2, -1, -1, -1],
-//     [-1, -1, -1, -1, -1],
-//     [-1, -1, -1, -1, -1]];
-// const shape = new Shape(0, 1, 2, 2,0);
-// console.log(testMap.testShape(shape));
-// testMap.groundShape(shape);
-// console.log(testMap);
-let shape1 = new Shape(0, 1, 5, 3, 0);
-let shape2 = new Shape(0, 2, 5, 1, 0);
-const player1 = new PlayerInfo(1, shape1);
-const player2 = new PlayerInfo(2, shape2);
-
-game.set(1, player1);
-game.set(2, player2)
-//game.addNewShape(0);
-console.log(game);
-console.log(map);
-console.log(renderer);
-renderer.render();
+const particles = [];
+const renderer = new Renderer(particles,canvas.getContext("2d"));
+for(let i = 0; i < 2 ; i ++){
+    particles.push(Particle.generateParticle());
+}
+console.log(particles);
 
 //Game loop and rendr loop
 const loop = () => {
@@ -49,7 +23,14 @@ const loop = () => {
 }
 window.requestAnimationFrame(loop)
 setInterval(() => {
-    game.step();
-}, stepIntervalMs)
+    particles.forEach((p)=>{
+        p.calculate_gravitational_force(particles);
+    })
+    particles.forEach((p)=>{
+        p.update();
+
+    })
+
+}, 1000/FPS_WANTED)
 
 console.log("Hello, world!");
