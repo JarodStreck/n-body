@@ -13,12 +13,11 @@ export class Particle {
         this.mass = mass;
         this.color = color;
     }
-    update(){
-        const delta_time = 1000/FPS_WANTED;
-        this.vx += this.ax * delta_time;
-        this.vy += this.ay * delta_time;
-        this.x += this.vx * delta_time;
-        this.y += this.vy * delta_time;
+    update(dt){
+        this.vx += this.ax * dt;
+        this.vy += this.ay * dt;
+        this.x += this.vx * dt;
+        this.y += this.vy * dt;
         if(this.x <= 0 || this.x >= CANVAS_WIDTH){
             this.vx = - this.vx ;
         }
@@ -37,7 +36,7 @@ export class Particle {
               const distance = Math.sqrt(dx * dx + dy * dy);
         
               // F = G * (m1 * m2) / r^2
-              const force = (GRAVITATIONAL_CONSTANT * this.mass * particle.mass) / Math.max((distance * distance),500);
+              const force = (GRAVITATIONAL_CONSTANT * this.mass * particle.mass) / Math.max((distance * distance),100);
             
             
               this.ax += force * dx / distance;
@@ -63,7 +62,7 @@ export class Particle {
         const vy = Math.random() * 2 - 1;
         const color = "purple";
         const mass = 1;
-        return new Particle(this.id++,x,y,radius,vx,vy,mass,color)
+        return new Particle(this.id++,x,y,radius,1,1,mass,color)
     }
     static randomNumber(lower,upper){
         return Math.floor(Math.random()*(upper-lower) + lower);
