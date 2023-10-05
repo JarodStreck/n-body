@@ -8,15 +8,15 @@ export class Particle {
         this.radius = radius;
         this.vx = vx;
         this.vy = vy;
-        this.accx = 0;
-        this.accy = 0;
+        this.ax = 0;
+        this.ay = 0;
         this.mass = mass;
         this.color = color;
     }
     update(){
-        const delta_time = 100/FPS_WANTED;
-        this.vx += this.accx * delta_time;
-        this.vy += this.accy * delta_time;
+        const delta_time = 1000/FPS_WANTED;
+        this.vx += this.ax * delta_time;
+        this.vy += this.ay * delta_time;
         this.x += this.vx * delta_time;
         this.y += this.vy * delta_time;
         if(this.x <= 0 || this.x >= CANVAS_WIDTH){
@@ -26,8 +26,8 @@ export class Particle {
             this.vy = -this.vy;
         }
 
-        this.accx = 0;
-        this.accy = 0;
+        this.ax = 0;
+        this.ay = 0;
     }
     calculate_gravitational_force(particles){
         for (const particle of particles) {
@@ -37,14 +37,15 @@ export class Particle {
               const distance = Math.sqrt(dx * dx + dy * dy);
         
               // F = G * (m1 * m2) / r^2
-              const forceMagnitude = (GRAVITATIONAL_CONSTANT * this.mass * particle.mass) / (distance * distance);
-              const forceX = forceMagnitude * (dx / distance);
-              const forceY = forceMagnitude * (dy / distance);
+              const force = (GRAVITATIONAL_CONSTANT * this.mass * particle.mass) / Math.max((distance * distance),500);
             
-              this.accx += forceX / this.mass;
-              this.accy += forceY / this.mass;
+            
+              this.ax += force * dx / distance;
+              this.ay += force * dy / distance;
             }
-          }
+        }
+        this.ax /= this.mass;
+        this.ay /= this.mass;
     }
 
     /**
@@ -60,9 +61,8 @@ export class Particle {
         const y = Particle.randomNumber(0+ radius/2,CANVAS_HEIGHT-radius/2);
         const vx = Math.random() * 2 - 1;
         const vy = Math.random() * 2 - 1;
-        console.log(vx + " " + vy);
         const color = "purple";
-        const mass = 1000;
+        const mass = 1;
         return new Particle(this.id++,x,y,radius,vx,vy,mass,color)
     }
     static randomNumber(lower,upper){
